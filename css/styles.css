@@ -156,7 +156,7 @@ thead th{position:sticky;top:62px;z-index:1000;background:#172b4d}
   font-size:1.25em;
   vertical-align:middle;
   transform-origin:50% 80%;
-  animation:winnerTrophyFloat 5s ease-in-out 1;
+  animation:winnerTrophyFloat 1.4s ease-in-out infinite;
 }
 @keyframes winnerTrophyFloat{
   0%,100%{transform:translateY(0)}
@@ -165,7 +165,7 @@ thead th{position:sticky;top:62px;z-index:1000;background:#172b4d}
   75%{transform:translateY(-13px)}
 }
 @media(prefers-reduced-motion:reduce){
-  .winner-trophy-animation{animation:none}
+  .winner-trophy-animation{animation:winnerTrophyFloat 1.4s ease-in-out infinite!important}
 }
 
 
@@ -301,6 +301,7 @@ input{font-size:16px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .winner-trophy-animation{animation:winnerTrophyFloat 1.4s ease-in-out infinite!important}
 }
 /* Save always remains navy */
 #savePlayerNames{background:#172b4d!important;color:#fff!important;border:1px solid #172b4d!important}
