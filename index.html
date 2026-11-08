@@ -289,13 +289,22 @@ async function loadGameFromIndexedDB(){
  }catch(error){console.warn("Could not restore from IndexedDB:",error);return false;}
 }
 function checkGameOverVoice(){
- const grandTotal=[0,1,2,3].reduce((sum,i)=>{
+ // Add all four green-row totals. When their combined total reaches 1,000,
+ // announce the player with the highest individual total, then say "Game Over".
+ const totals=[0,1,2,3].map(i=>{
   const value=Number((document.getElementById("total"+i)?.textContent||"0").replace(/,/g,""));
-  return sum+(Number.isFinite(value)?value:0);
- },0);
+  return Number.isFinite(value)?value:0;
+ });
+ const grandTotal=totals.reduce((sum,value)=>sum+value,0);
  if(grandTotal>=1000&&!gameOverAnnounced&&audioEnabled){
   gameOverAnnounced=true;
-  speakText("Game over",.72,1.0);
+  const highest=Math.max(...totals);
+  const winners=totals
+   .map((value,index)=>value===highest?names()[index]:null)
+   .filter(Boolean);
+  const winnerText=winners.join(" and ");
+  document.getElementById("announcement").textContent=`🏆 ${winnerText} Won — Game Over!`;
+  speakText(`${winnerText} Won. Game Over.`,.72,1.0);
  }
 }
 function updateTotals(){
@@ -304,6 +313,7 @@ function updateTotals(){
   if(/^\d{1,4}$/.test(input.value.trim()))totals[i]+=Number(input.value);
  }));
  totals.forEach((n,i)=>document.getElementById("total"+i).textContent=n.toLocaleString("en-US"));
+ checkGameOverVoice();
 }
 function evaluateRow(row,announce=true){
  const inputs=rowInputs(row),values=inputs.map(x=>x.value.trim());
