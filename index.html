@@ -2,115 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="theme-color" content="#172b4d">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="JABJAL Number Winner Game">
 <title>JABJAL, Call 631-992-4128</title>
-<style>
-*{box-sizing:border-box}
-html,body{width:100%;max-width:100%;margin:0;overflow-x:hidden}
-body{padding:14px;font-family:Arial,sans-serif;background:#f1f4f9;color:#172b4d}
-.container{width:100%;max-width:1100px;margin:18px auto;background:#fff;padding:22px;border-radius:16px;box-shadow:0 5px 25px #00000012}
-h1{text-align:center;font-size:clamp(21px,4vw,32px);margin:8px 0;color:#172b4d}
-.subtitle{text-align:center;color:#64748b;margin:0 0 18px}
-.toolbar{position:sticky;top:0;z-index:1000;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 18px;padding:8px;background:#172b4d;border-radius:11px;box-shadow:0 3px 12px #00000025}
-button{border:0;border-radius:9px;padding:11px 7px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;min-width:0}
-button:focus-visible,input:focus-visible{outline:3px solid #93c5fd;outline-offset:2px}
-.primary{background:#1769e0;color:white}.primary:hover{background:#0649a8}
-.secondary{background:#334b70;color:#ffffff}.danger{background:#b91c1c;color:#ffffff}
-.table-wrap{width:100%;max-width:100%;overflow:hidden;border:1px solid #dbe2ea;border-radius:10px}
-table{width:100%;max-width:100%;table-layout:fixed;border-collapse:collapse;text-align:center}
-th,td{width:25%;padding:11px 5px;border-bottom:1px solid #e5e7eb;overflow-wrap:anywhere}
-thead th{background:#172b4d;color:white}
-.name-input{display:block;width:100%;min-width:0;text-align:center;background:#fff;color:#172b4d;border:1px solid #b9c7d8;border-radius:7px;padding:10px 2px;font-size:clamp(12px,1.8vw,16px);font-weight:700}
-.number-input{display:block;width:100%;min-width:0;text-align:center;border:1px solid #cbd5e1;border-radius:7px;padding:10px 1px;font-size:clamp(13px,2vw,17px);font-weight:700;color:#172b4d}
-.number-input::placeholder{font-size:11px;font-weight:400;color:#94a3b8}\n.winner-cell .number-input::placeholder{color:#ffffff;opacity:.85}
-tbody tr:nth-child(even){background:#f8fafc}
-.winner-cell{background:#ffffff!important;color:inherit;font-weight:700}
-.winner-cell .number-input{border:1px solid #cbd5e1!important;background:#ffffff!important;color:#f97316!important;font-weight:900}
-tfoot th{background:#15803d;color:#ffffff!important;font-weight:900;border-top:2px solid #166534;font-size:clamp(12px,1.8vw,15px);padding:11px 2px}
-#totalLabel{background:#166534;color:#ffffff;font-weight:900;letter-spacing:.5px}
-.round-cell{display:none!important}
-#announcement{text-align:center;font-size:clamp(17px,4vw,26px);font-weight:700;color:#08752b;padding:17px 5px;min-height:62px;overflow-wrap:anywhere}
-.round-info{text-align:center;color:#64748b;font-size:14px;margin-top:5px}
-.hint{font-size:13px;color:#64748b;text-align:center;line-height:1.5;margin:12px 0}
-.status{font-size:13px;color:#64748b;text-align:center;min-height:18px}
-.row-winner{font-size:10px;color:#08752b;font-weight:700;display:inline;margin-left:3px;vertical-align:middle}
 
-.winner-banner{width:100%;margin:0 0 12px;padding:10px 12px;background:#fff;border:2px solid #dc2626;border-radius:10px;text-align:center}
-.winner-marquee{overflow:hidden;white-space:nowrap;width:100%;margin-bottom:8px}
-#winnerMarqueeText{display:inline-block;color:#dc2626;font-size:clamp(22px,4vw,30px);font-weight:900;letter-spacing:.5px;padding-left:100%;animation:winnerMarqueeScroll 13s linear infinite}
-@keyframes winnerMarqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-100%)}}
-.winner-name-label{display:none}
-.winner-name-input{display:block;width:min(58%,240px);margin:0 auto;padding:8px 10px;border:1px solid #dc2626;border-radius:7px;font-size:14px;font-weight:700;color:#b91c1c;text-align:center}
-@media(max-width:600px){\n .winner-banner{padding:8px 6px;margin-bottom:9px}\n #winnerMarqueeText{font-size:21px}\n .winner-name-input{font-size:13px;padding:7px 5px}\n .toolbar{top:0;padding-top:calc(5px + env(safe-area-inset-top));}
- h1{font-size:clamp(14px,4.5vw,20px);white-space:nowrap;letter-spacing:-.55px;line-height:1.15;margin:7px 0 9px}
- .subtitle{font-size:13px;line-height:1.2;margin:0 0 14px}
- body{padding:7px}
- .container{padding:12px 7px;margin:7px auto;border-radius:11px}
- .toolbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:5px}
- .toolbar button{width:100%;min-width:0;margin:0;padding:9px 1px;font-size:11px;letter-spacing:-.25px}
- th,td{padding:4px 2px}
- tbody td{border-bottom:0}
- .name-input{padding:9px 1px;font-size:clamp(10px,3.2vw,14px);border-radius:5px}
- .number-input{padding:7px 0;font-size:clamp(12px,3.5vw,16px);border-radius:5px}
- .number-input::placeholder{font-size:9px}
- tfoot th{font-size:clamp(10px,2.8vw,13px);padding:9px 1px}
- .row-winner{font-size:9px;margin-left:2px}
- #announcement{padding:12px 2px}
- .hint{font-size:12px}
-}
-@media(max-width:360px){
- h1{font-size:14px;letter-spacing:-.65px;white-space:nowrap}
- .toolbar{grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:4px}
- .toolbar button{font-size:10px;padding:8px 0;letter-spacing:-.4px}
- body{padding:4px}
- .container{padding:10px 5px}
- th,td{padding:3px 1px}
- tbody td{border-bottom:0}
- .name-input{font-size:10px}
- .number-input{font-size:12px;padding:6px 0}
-}
-
-/* Compact professional top marquee area */
-.marquee, .winner-marquee, .top-marquee, .marquee-container {
-  padding-top: 2px !important;
-  padding-bottom: 2px !important;
-  margin-top: 2px !important;
-  margin-bottom: 4px !important;
-  min-height: 0 !important;
-  line-height: 1.05 !important;
-}
-.marquee input, .winner-marquee input, .top-marquee input, .marquee-container input {
-  height: 26px !important;
-  min-height: 26px !important;
-  padding: 2px 7px !important;
-  line-height: 1.1 !important;
-}
-
-</style>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+<div id="nameSetupModal" class="name-setup-overlay" role="dialog" aria-modal="true" aria-labelledby="nameSetupTitle">
+  <div class="name-setup-card">
+    <h2 id="nameSetupTitle">Edit Player Names</h2>
+    <p class="name-setup-help">Enter the names of all four players.</p>
+    <div class="name-setup-fields">
+      <label><input id="setupName0" type="text" maxlength="30" placeholder="Bappi"></label>
+      <label><input id="setupName1" type="text" maxlength="30" placeholder="Nahid"></label>
+      <label><input id="setupName2" type="text" maxlength="30" placeholder="Mijan"></label>
+      <label><input id="setupName3" type="text" maxlength="30" placeholder="Montu"></label>
+    </div>
+    <div class="name-setup-actions">
+      <button id="savePlayerNames" class="primary name-setup-save" type="button">Save</button>
+      <button id="cancelPlayerNames" class="secondary name-setup-cancel" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <main class="container">
   <h1>🏆 Number Winner Game</h1>
+  <p class="subtitle">Edit the names and enter the numbers</p>
+  <div class="sticky-game-top" id="stickyGameTop">
   <section class="winner-banner" aria-label="Winner announcement banner">
     <div class="winner-marquee" aria-live="polite">
       <span id="winnerMarqueeText">Bappi Won The Game</span>
     </div>
-    <input id="winnerNameInput" class="winner-name-input" type="text" value="Bappi" maxlength="30" aria-label="Edit marquee winner name" placeholder="Enter Number">
+    <div class="winner-name-row">
+      <input id="winnerNameInput" class="winner-name-input" type="text" value="Bappi" maxlength="30" aria-label="Edit marquee winner name" placeholder="Enter Number">
+      <div class="language-picker">
+        <button id="languageButton" class="language-button" type="button" aria-label="Choose voice language" aria-expanded="false">L</button>
+        <div id="languageMenu" class="language-menu" hidden>
+          <button type="button" data-lang="en-US">Eng</button>
+          <button type="button" data-lang="bn-BD">Bang</button>
+          <button type="button" data-lang="hi-IN">Hindi</button>
+          <button type="button" data-lang="ur-PK">Urdu</button>
+          <button type="button" data-lang="es-ES">Span</button>
+        </div>
+      </div>
+    </div>
   </section>
-  <p class="subtitle">Edit the names and enter the numbers </p>
-  <nav class="toolbar" aria-label="Game menu">
+<nav class="toolbar" aria-label="Game menu">
     <button class="secondary" id="voiceBtn" type="button" title="Enable Voice and Clap">🔊 Voice</button>
     <button class="primary" id="addBtn" type="button" title="Add Next Row">➕ Add</button>
     <button class="secondary" id="announceBtn" type="button" title="Announce Latest Winner">📣 Winner</button>
     <button class="danger" id="resetBtn" type="button" title="Reset Game">↻ Reset</button>
   </nav>
+  </div>
   <div class="table-wrap">
     <table>
       <thead><tr>
         <th><input class="name-input" aria-label="Player 1 name" value="Bappi"></th>
         <th><input class="name-input" aria-label="Player 2 name" value="Nahid"></th>
         <th><input class="name-input" aria-label="Player 3 name" value="Mijan"></th>
-        <th><input class="name-input" aria-label="Player 4 name" value="Gofur"></th>
+        <th><input class="name-input" aria-label="Player 4 name" value="Montu"></th>
       </tr></thead>
       <tbody id="results"></tbody>
       <tfoot>
@@ -121,285 +74,8 @@ tfoot th{background:#15803d;color:#ffffff!important;font-weight:900;border-top:2
   <div id="announcement" aria-live="polite">Ready to Play!</div>
   <div class="round-info">Total Rounds: <span id="roundCount">0</span></div>
 </main>
-<script>
-const results=document.getElementById("results");
-const names=()=>[...document.querySelectorAll(".name-input")].map((el,i)=>el.value.trim()||`Player ${i+1}`);
-let audioEnabled=false,roundCount=0,gameOverAnnounced=false;
-let gameAudioContext=null,availableVoices=[],winnerReminderTimer=null;
-const WINNER_REMINDER_MS=15*60*1000;
-function currentWinnerName(){
- const field=document.getElementById("winnerNameInput");
- return (field?.value||"").trim()||"Winner";
-}
-function updateWinnerMarquee(){
- const name=currentWinnerName();
- document.getElementById("winnerMarqueeText").textContent=`${name} Won The Game`;
-}
-function refreshVoices(){
- if("speechSynthesis" in window)availableVoices=speechSynthesis.getVoices()||[];
-}
-function getVoice(){
- const voices=availableVoices.length?availableVoices:(("speechSynthesis" in window)?speechSynthesis.getVoices():[]);
- return voices.find(v=>/samantha|zira|jenny|aria|female/i.test(v.name))||voices.find(v=>/^en(-|_)/i.test(v.lang))||null;
-}
-if("speechSynthesis" in window){
- refreshVoices();
- speechSynthesis.addEventListener?.("voiceschanged",refreshVoices);
-}
-function speakText(text,rate=.72,pitch=1.0){
- if(!audioEnabled||!("speechSynthesis" in window))return;
- try{
-  speechSynthesis.cancel();
-  const msg=new SpeechSynthesisUtterance(text);
-  msg.lang="en-US";msg.rate=rate;msg.pitch=pitch;msg.volume=1;
-  const voice=getVoice();if(voice)msg.voice=voice;
-  speechSynthesis.speak(msg);
- }catch(error){console.warn("Speech playback failed:",error);}
-}
-async function enableAudio(){
- const status=document.getElementById("status")||{set textContent(value){}};
- if(!("speechSynthesis" in window)){
-  status.textContent="Voice is not supported by this browser. Try Safari or Chrome with sound enabled.";
-  return;
- }
- audioEnabled=true;
- try{
-  const AC=window.AudioContext||window.webkitAudioContext;
-  if(AC){
-   if(!gameAudioContext)gameAudioContext=new AC();
-   if(gameAudioContext.state==="suspended")await gameAudioContext.resume();
-  }
- }catch(error){console.warn("Audio could not be unlocked:",error);}
- refreshVoices();
- speakText("Voice and applause are enabled. Winner reminders will play every fifteen minutes.");
- if(winnerReminderTimer)clearInterval(winnerReminderTimer);
- winnerReminderTimer=setInterval(announceWinnerReminder,WINNER_REMINDER_MS);
- status.textContent="Voice enabled. Winner name will be announced every 15 minutes while this page stays open.";
- checkGameOverVoice();
-}
-function playClap(){
- if(!audioEnabled)return;
- const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
- try{
-  if(!gameAudioContext)gameAudioContext=new AC();
-  const ctx=gameAudioContext;
-  if(ctx.state==="suspended")ctx.resume();
-  for(let i=0;i<12;i++){
-   const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.085),ctx.sampleRate),data=buffer.getChannelData(0);
-   for(let j=0;j<data.length;j++)data[j]=(Math.random()*2-1)*Math.pow(1-j/data.length,3);
-   const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=.5;
-   source.connect(gain);gain.connect(ctx.destination);source.start(ctx.currentTime+i*.13);
-  }
- }catch(error){console.warn("Applause playback failed:",error);}
-}
-function announceWinnerReminder(){
- if(!audioEnabled)return;
- const name=currentWinnerName();
- updateWinnerMarquee();
- playClap();
- speakText(`Ha ha ha! Congratulations! ${name} won the game! Ha ha ha!`,.9,1.25);
-}
-function speakWinner(name,number){
- if(!audioEnabled)return;
- playClap();
- speakText(`${name} wins with ${number}!`,.72,1.0);
-}
-function rowInputs(row){return [...row.querySelectorAll(".number-input")];}
-const SAVE_KEY="jabjalNumberWinnerGame_v2";
-const DB_NAME="JABJALNumberWinnerDB",DB_STORE="gameState";
-function captureGame(){
- return {
-  names:[...document.querySelectorAll(".name-input")].map(input=>input.value),
-  rows:[...results.querySelectorAll("tr")].map(row=>rowInputs(row).map(input=>input.value))
- };
-}
-function openGameDB(){
- return new Promise((resolve,reject)=>{
-  if(!("indexedDB" in window)){reject(new Error("IndexedDB unavailable"));return;}
-  const request=indexedDB.open(DB_NAME,1);
-  request.onupgradeneeded=()=>{if(!request.result.objectStoreNames.contains(DB_STORE))request.result.createObjectStore(DB_STORE);};
-  request.onsuccess=()=>resolve(request.result);
-  request.onerror=()=>reject(request.error);
- });
-}
-async function saveToIndexedDB(state){
- const db=await openGameDB();
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction(DB_STORE,"readwrite");
-  tx.objectStore(DB_STORE).put(state,SAVE_KEY);
-  tx.oncomplete=()=>{db.close();resolve();};
-  tx.onerror=()=>{db.close();reject(tx.error);};
- });
-}
-async function readFromIndexedDB(){
- const db=await openGameDB();
- return new Promise((resolve,reject)=>{
-  const tx=db.transaction(DB_STORE,"readonly"),request=tx.objectStore(DB_STORE).get(SAVE_KEY);
-  request.onsuccess=()=>resolve(request.result||null);
-  request.onerror=()=>reject(request.error);
-  tx.oncomplete=()=>db.close();
- });
-}
-function saveGame(){
- const state=captureGame();
- let localSaved=false;
- try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));localSaved=true;}
- catch(error){console.warn("Local storage unavailable:",error);}
- saveToIndexedDB(state).then(()=>{
-  const status=document.getElementById("status")||{set textContent(value){}};
-  if(status&&status.textContent.startsWith("Auto-save is unavailable"))status.textContent="Auto-save enabled.";
- }).catch(error=>{
-  console.warn("IndexedDB save unavailable:",error);
-  if(!localSaved){
-   const status=document.getElementById("status")||{set textContent(value){}};
-   if(status)status.textContent="Auto-save is blocked in this browser. Open the game from a normal website tab (https://), not private mode.";
-  }
- });
-}
-function applySavedGame(state){
- if(!state||!Array.isArray(state.rows))return false;
- if(Array.isArray(state.names)){
-  document.querySelectorAll(".name-input").forEach((input,i)=>{if(state.names[i]!==undefined)input.value=state.names[i];});
- }
- results.innerHTML="";roundCount=0;gameOverAnnounced=false;
- state.rows.forEach(values=>{
-  addRow(false);
-  const row=results.lastElementChild;
-  rowInputs(row).forEach((input,i)=>{input.value=String(values?.[i]??"").replace(/\\D/g,"").slice(0,4);});
-  evaluateRow(row,false);
- });
- if(!state.rows.length)addRow(false);
- updateTotals();
- document.getElementById("roundCount").textContent=roundCount;
- refreshAll();
- saveGame();
- return true;
-}
-function loadGame(){
- try{
-  const raw=localStorage.getItem(SAVE_KEY);
-  if(raw&&applySavedGame(JSON.parse(raw)))return true;
- }catch(error){console.warn("Could not restore from local storage:",error);}
- return false;
-}
-async function loadGameFromIndexedDB(){
- try{
-  const state=await readFromIndexedDB();
-  return applySavedGame(state);
- }catch(error){console.warn("Could not restore from IndexedDB:",error);return false;}
-}
-function checkGameOverVoice(){
- // Add all four green-row totals. When their combined total reaches 1,000,
- // announce the player with the highest individual total, then say "Game Over".
- const totals=[0,1,2,3].map(i=>{
-  const value=Number((document.getElementById("total"+i)?.textContent||"0").replace(/,/g,""));
-  return Number.isFinite(value)?value:0;
- });
- const grandTotal=totals.reduce((sum,value)=>sum+value,0);
- if(grandTotal>=1000&&!gameOverAnnounced&&audioEnabled){
-  gameOverAnnounced=true;
-  const highest=Math.max(...totals);
-  const winners=totals
-   .map((value,index)=>value===highest?names()[index]:null)
-   .filter(Boolean);
-  const winnerText=winners.join(" and ");
-  document.getElementById("announcement").textContent=`🏆 ${winnerText} Won — Game Over!`;
-  speakText(`${winnerText} Won. Game Over.`,.72,1.0);
- }
-}
-function updateTotals(){
- const totals=[0,0,0,0];
- [...results.querySelectorAll("tr")].forEach(row=>rowInputs(row).forEach((input,i)=>{
-  if(/^\d{1,4}$/.test(input.value.trim()))totals[i]+=Number(input.value);
- }));
- totals.forEach((n,i)=>document.getElementById("total"+i).textContent=n.toLocaleString("en-US"));
- checkGameOverVoice();
-}
-function evaluateRow(row,announce=true){
- const inputs=rowInputs(row),values=inputs.map(x=>x.value.trim());
- row.querySelectorAll("td").forEach(td=>td.classList.remove("winner-cell"));
- row.querySelectorAll(".row-winner").forEach(el=>el.remove());
- if(!values.every(v=>/^\d{1,4}$/.test(v))){row.dataset.winnerSignature="";row.dataset.winnerIndex="";return;}
- const nums=values.map(Number),max=Math.max(...nums);
- const indexes=nums.map((n,i)=>n===max?i:-1).filter(i=>i>=0);
- indexes.forEach(i=>{
-  const td=inputs[i].closest("td");td.classList.add("winner-cell");
- });
- const playerNames=names(),winnerName=indexes.map(i=>playerNames[i]).join(" and ");
- const signature=values.join("|")+"|"+playerNames.join("|"),changed=row.dataset.winnerSignature!==signature;
- row.dataset.winnerIndex=indexes.join(",");row.dataset.winnerSignature=signature;
- if(announce&&changed){
-  document.getElementById("announcement").textContent=`🏆 Round ${row.dataset.round}: ${winnerName} wins with ${max.toLocaleString("en-US")}!`;
-  speakWinner(winnerName,max);
- }
-}
-function refreshAll(){
- updateTotals();
- [...results.querySelectorAll("tr")].forEach(row=>evaluateRow(row,false));
- const last=results.lastElementChild;if(!last)return;
- const indexes=(last.dataset.winnerIndex||"").split(",").filter(Boolean).map(Number);
- if(indexes.length){
-  const max=Math.max(...rowInputs(last).map(x=>Number(x.value)));
-  document.getElementById("announcement").textContent=`🏆 Round ${last.dataset.round}: ${indexes.map(i=>names()[i]).join(" and ")} wins with ${max.toLocaleString("en-US")}!`;
- }
-}
-function addRow(focusFirst=true){
- roundCount++;
- const tr=document.createElement("tr");tr.dataset.round=String(roundCount);
- const hidden=document.createElement("td");hidden.className="round-cell";hidden.textContent="#"+roundCount;tr.appendChild(hidden);
- for(let i=0;i<4;i++){
-  const td=document.createElement("td"),input=document.createElement("input");
-  input.className="number-input";input.type="text";input.inputMode="numeric";input.autocomplete="off";input.maxLength=4;input.placeholder="Enter Number";
-  input.setAttribute("aria-label",`Round ${roundCount}, ${names()[i]} number`);
-  input.addEventListener("input",()=>{
-   input.value=input.value.replace(/\D/g,"").slice(0,4);
-   updateTotals();evaluateRow(tr,true);checkGameOverVoice();saveGame();
-  });
-  td.appendChild(input);tr.appendChild(td);
- }
- results.appendChild(tr);
- document.getElementById("roundCount").textContent=roundCount;
- (document.getElementById("status")||{set textContent(value){}}).textContent=`Round ${roundCount} added. Enter four numbers (1–4 digits).`;
- if(focusFirst) tr.querySelector(".number-input").focus();
- saveGame();
-}
-function announceLatest(){
- const last=results.lastElementChild;
- if(!last){(document.getElementById("status")||{set textContent(value){}}).textContent="Add a row and enter numbers first.";return;}
- const inputs=rowInputs(last);
- if(!inputs.every(x=>/^\d{1,4}$/.test(x.value.trim()))){(document.getElementById("status")||{set textContent(value){}}).textContent="Enter all four numbers in the latest row first.";return;}
- const nums=inputs.map(x=>Number(x.value)),max=Math.max(...nums),indexes=nums.map((n,i)=>n===max?i:-1).filter(i=>i>=0);
- const winner=indexes.map(i=>names()[i]).join(" and ");
- document.getElementById("announcement").textContent=`🏆 Round ${last.dataset.round}: ${winner} wins with ${max.toLocaleString("en-US")}!`;
- speakWinner(winner,max);
-}
-function resetGame(){
- if(!confirm("Clear all rounds and totals?"))return;
- results.innerHTML="";roundCount=0;gameOverAnnounced=false;
- localStorage.removeItem(SAVE_KEY);
- document.getElementById("roundCount").textContent="0";
- document.getElementById("announcement").textContent="Ready to Play!";
- (document.getElementById("status")||{set textContent(value){}}).textContent="Game reset. Player names are unchanged.";
- updateTotals();
-}
-document.getElementById("winnerNameInput").addEventListener("input",updateWinnerMarquee);
-updateWinnerMarquee();
-document.getElementById("addBtn").addEventListener("click",addRow);
-document.getElementById("voiceBtn").addEventListener("click",enableAudio);
-document.getElementById("announceBtn").addEventListener("click",announceLatest);
-document.getElementById("resetBtn").addEventListener("click",resetGame);
-document.querySelectorAll(".name-input").forEach(input=>input.addEventListener("input",()=>{
- document.querySelectorAll("#results tr").forEach(row=>rowInputs(row).forEach((x,i)=>x.setAttribute("aria-label",`Round ${row.dataset.round}, ${names()[i]} number`)));
- refreshAll();
- saveGame();
-}));
-if("speechSynthesis"in window)speechSynthesis.getVoices();
-// Restore from local storage first, then IndexedDB for browsers where local storage is unavailable.
-(async()=>{
- if(loadGame())return;
- if(await loadGameFromIndexedDB())return;
- addRow(false);
-})();
-</script>
+<footer class="game-footer"><span>© <span id="footerYear">2026</span> JABJAL</span><span>| <a class="footer-whatsapp" href="https://wa.me/16319924128" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><span class="footer-phone-icon">☎</span><span class="footer-phone-number">6319924128</span></a></span></footer>
+
+  <script src="js/script.js"></script>
 </body>
 </html>
