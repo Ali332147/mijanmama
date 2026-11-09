@@ -1,10 +1,12 @@
-JABJAL Number Winner Game - Sticky Top Update
+JABJAL Number Winner Game – Corrected Marquee, Highest Total & Game Over
 
-Update:
-- The marquee/winner banner, winner name input and language menu stay visible while scrolling.
-- Voice/Add/Winner/Reset menu stays visible directly below the marquee.
-- Player name header row stays visible directly below the sticky menu.
-- Sticky offsets are measured dynamically for iPhone Safari, Android Chrome and desktop layouts.
-- Existing Save/Cancel, inline player-name editing, auto-save and game features are preserved from the Persistent Data build.
+Changes:
+- Restored the marquee to show the original winner-name text (e.g. “Bappi Won The Game”).
+- Highest Total remains in the original announcement area, not in the marquee.
+- Voice says “Highest Total: [number]” only after all four numbers in a row are entered and typing pauses.
+- Game Over is spoken only once after a complete four-number row is entered and the combined total of all four players is greater than 1000.
+- Partial typing and enabling Voice do not trigger Game Over.
+- Game Over does not overwrite the Highest Total display.
+- No clap/applause.
 
-Upload/extract the complete folder structure together: index.html, css/styles.css, js/script.js.
+Upload index.html, css/ and js/ together to GitHub Pages.

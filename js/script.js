@@ -1,7 +1,7 @@
 const results=document.getElementById("results");
 const names=()=>[...document.querySelectorAll(".name-input")].map((el,i)=>el.value.trim()||`Player ${i+1}`);
 let audioEnabled=false,roundCount=0,gameOverAnnounced=false;
-let gameAudioContext=null,availableVoices=[],winnerReminderTimer=null;
+let gameAudioContext=null,availableVoices=[],winnerReminderTimer=null,highestSpeakTimer=null,lastSpokenHighest="";
 let selectedVoiceLanguage="en-US";
 const voicePhrases={
  "en-US":{enabled:"Voice and applause are enabled.",won:"Won",gameOver:"Game Over"},
@@ -46,6 +46,18 @@ function currentWinnerName(){
 function updateWinnerMarquee(){
  const name=currentWinnerName();
  document.getElementById("winnerMarqueeText").textContent=`${name} ${tr("won")}`;
+}
+function displayHighestTotal(value){
+ const message=`Highest Total: ${Number(value).toLocaleString("en-US")}`;
+ const announcement=document.getElementById("announcement");
+ if(announcement){
+  announcement.textContent=message;
+  const trophy=document.createElement("span");
+  trophy.className="winner-trophy-animation";
+  trophy.setAttribute("aria-label","Winning trophy");
+  trophy.textContent=" 🫴🏆";
+  announcement.appendChild(trophy);
+ }
 }
 function refreshVoices(){
  if("speechSynthesis" in window)availableVoices=speechSynthesis.getVoices()||[];
@@ -92,38 +104,16 @@ async function enableAudio(){
   }
  }catch(error){console.warn("Audio could not be unlocked:",error);}
  refreshVoices();
- speakText(voicePhrases[selectedVoiceLanguage].enabled+" Winner reminders will play every fifteen minutes.");
  if(winnerReminderTimer)clearInterval(winnerReminderTimer);
- winnerReminderTimer=setInterval(announceWinnerReminder,WINNER_REMINDER_MS);
+ winnerReminderTimer=null;
  status.textContent=tr("voiceEnabled");
- checkGameOverVoice();
-}
-function playClap(){
- if(!audioEnabled)return;
- const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
- try{
-  if(!gameAudioContext)gameAudioContext=new AC();
-  const ctx=gameAudioContext;
-  if(ctx.state==="suspended")ctx.resume();
-  for(let i=0;i<12;i++){
-   const buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.085),ctx.sampleRate),data=buffer.getChannelData(0);
-   for(let j=0;j<data.length;j++)data[j]=(Math.random()*2-1)*Math.pow(1-j/data.length,3);
-   const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=.5;
-   source.connect(gain);gain.connect(ctx.destination);source.start(ctx.currentTime+i*.13);
-  }
- }catch(error){console.warn("Applause playback failed:",error);}
 }
 function announceWinnerReminder(){
- if(!audioEnabled)return;
- const name=currentWinnerName();
- updateWinnerMarquee();
- playClap();
- speakText(`Ha ha ha! Congratulations! ${name} won the game! Ha ha ha!`,.9,1.25);
+ // Periodic winner reminders are disabled.
 }
 function speakWinner(name,number){
- if(!audioEnabled)return;
- playClap();
- speakText(`${name} wins with ${number}!`,.72,1.0);
+ // Highest-number / round-winner detection is visual only: no clap or spoken number.
+ return;
 }
 function rowInputs(row){return [...row.querySelectorAll(".number-input")];}
 const SAVE_KEY="jabjalNumberWinnerGame_v2";
@@ -187,7 +177,7 @@ function applySavedGame(state){
  }
  if(typeof state.winnerName==="string")document.getElementById("winnerNameInput").value=state.winnerName;
  if(UI[state.language])selectedVoiceLanguage=state.language;
- results.innerHTML="";roundCount=0;gameOverAnnounced=false;
+ results.innerHTML="";roundCount=0;gameOverAnnounced=false;lastSpokenHighest="";if(highestSpeakTimer)clearTimeout(highestSpeakTimer);
  state.rows.forEach(values=>{
   addRow(false);
   const row=results.lastElementChild;
@@ -229,21 +219,45 @@ function showWinnerAnnouncement(message){
 }
 
 function checkGameOverVoice(){
+ // Game Over depends ONLY on the Highest Total, not the combined total.
  const totals=[0,1,2,3].map(i=>{
   const value=Number((document.getElementById("total"+i)?.textContent||"0").replace(/,/g,""));
   return Number.isFinite(value)?value:0;
  });
- const grandTotal=totals.reduce((sum,value)=>sum+value,0);
- if(grandTotal>1000&&!gameOverAnnounced&&audioEnabled){
+ const highestTotal=Math.max(...totals);
+ if(highestTotal>=1000&&!gameOverAnnounced){
   gameOverAnnounced=true;
-  const highest=Math.max(...totals);
-  const winners=totals.map((value,index)=>value===highest?names()[index]:null).filter(Boolean);
-  const winnerText=winners.join(` ${tr("and")} `);
-  showWinnerAnnouncement(`🏆 ${winnerText} ${tr("won")} — ${tr("gameOver")}!`);
-  const phrase=voicePhrases[selectedVoiceLanguage];
-  playClap();
-  speakText(`${winnerText}. ${phrase.won}. ${phrase.gameOver}.`,.72,1.0);
+  // Return the event to the caller so Game Over can be spoken after
+  // Highest Total in the same utterance (speakText cancels prior speech).
+  return true;
  }
+ return false;
+}
+function scheduleHighestTotalVoiceAfterTyping(row){
+ // Wait until all four fields in this round are filled, then wait for typing to stop.
+ // Add button is not required for the spoken total.
+ if(highestSpeakTimer)clearTimeout(highestSpeakTimer);
+ const inputs=rowInputs(row);
+ const complete=inputs.length===4&&inputs.every(input=>/^\d{1,4}$/.test(input.value.trim()));
+ if(!complete||!audioEnabled)return;
+ highestSpeakTimer=setTimeout(()=>{
+  updateTotals();
+  const gameOverNow=checkGameOverVoice();
+  const totals=[0,1,2,3].map(i=>Number((document.getElementById("total"+i)?.textContent||"0").replace(/,/g,""))||0);
+  const highest=Math.max(...totals);
+  if(highest<=0)return;
+  const value=String(highest);
+  const highestChanged=value!==lastSpokenHighest;
+  if(highestChanged){
+   lastSpokenHighest=value;
+   displayHighestTotal(highest);
+  }
+  // Speak both messages together so the second one is not cancelled.
+  if(highestChanged||gameOverNow){
+   const message=`Highest Total: ${Number(value).toLocaleString("en-US")}${gameOverNow?`. ${tr("gameOver")}`:""}`;
+   speakText(message,.48,1.08);
+  }
+ },1500);
 }
 function updateTotals(){
  const totals=[0,0,0,0];
@@ -251,7 +265,8 @@ function updateTotals(){
   if(/^\d{1,4}$/.test(input.value.trim()))totals[i]+=Number(input.value);
  }));
  totals.forEach((n,i)=>document.getElementById("total"+i).textContent=n.toLocaleString("en-US"));
- checkGameOverVoice();
+ // The marquee winner is always the player(s) with the highest cumulative Total.
+ syncWinnerNameFromLatestRow(totals);
 }
 function evaluateRow(row,announce=true){
  const inputs=rowInputs(row),values=inputs.map(x=>x.value.trim());
@@ -266,20 +281,21 @@ function evaluateRow(row,announce=true){
  const playerNames=names(),winnerName=indexes.map(i=>playerNames[i]).join(` ${tr("and")} `);
  const signature=values.join("|")+"|"+playerNames.join("|"),changed=row.dataset.winnerSignature!==signature;
  row.dataset.winnerIndex=indexes.join(",");row.dataset.winnerSignature=signature;
- if(announce&&changed){
-  showWinnerAnnouncement(`🏆 ${tr("round")} ${row.dataset.round}: ${winnerName} ${tr("wins")} ${max.toLocaleString("en-US")}!`);
-  speakWinner(winnerName,max);
- }
+ // Keep the winner name box and marquee synced to the actual highest scorer in the latest completed round.
+ if(row===results.querySelector("tr:last-child"))syncWinnerNameFromLatestRow();
+ // Per-round winner text and speech are intentionally disabled.
+ // The only automatic result shown/spoken is the cumulative highest total after typing completes.
+
 }
 function refreshAll(){
  updateTotals();
  [...results.querySelectorAll("tr")].forEach(row=>evaluateRow(row,false));
- const last=results.lastElementChild;if(!last)return;
- const indexes=(last.dataset.winnerIndex||"").split(",").filter(Boolean).map(Number);
- if(indexes.length){
-  const max=Math.max(...rowInputs(last).map(x=>Number(x.value)));
-  showWinnerAnnouncement(`🏆 ${tr("round")} ${last.dataset.round}: ${indexes.map(i=>names()[i]).join(` ${tr("and")} `)} ${tr("wins")} ${max.toLocaleString("en-US")}!`);
- }
+ // Keep the result display reserved for the cumulative highest total.
+
+}
+function addNextRowAfterCompletedRound(){
+ // Add only creates the next row. Voice is triggered automatically after typing finishes.
+ addRow();
 }
 function addRow(focusFirst=true){
  roundCount++;
@@ -291,7 +307,7 @@ function addRow(focusFirst=true){
   input.setAttribute("aria-label",`${tr("round")} ${roundCount}, ${names()[i]} number`);
   input.addEventListener("input",()=>{
    input.value=input.value.replace(/\D/g,"").slice(0,4);
-   updateTotals();evaluateRow(rowEl,true);checkGameOverVoice();saveGame();
+   updateTotals();evaluateRow(rowEl,true);scheduleHighestTotalVoiceAfterTyping(rowEl);saveGame();
   });
   td.appendChild(input);rowEl.appendChild(td);
  }
@@ -301,19 +317,53 @@ function addRow(focusFirst=true){
  if(focusFirst) rowEl.querySelector(".number-input").focus();
  saveGame();
 }
+function playCongratulationSound(){
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return 850;
+  if(!gameAudioContext)gameAudioContext=new AC();
+  const ctx=gameAudioContext;
+  if(ctx.state==="suspended")ctx.resume();
+  const start=ctx.currentTime+0.03;
+  // Original short celebratory three-note fanfare (not an applause sample).
+  [[523.25,0],[659.25,.18],[783.99,.36],[1046.5,.56]].forEach(([frequency,offset])=>{
+   const osc=ctx.createOscillator(),gain=ctx.createGain();
+   osc.type="sine";osc.frequency.setValueAtTime(frequency,start+offset);
+   gain.gain.setValueAtTime(.0001,start+offset);
+   gain.gain.exponentialRampToValueAtTime(.22,start+offset+.025);
+   gain.gain.exponentialRampToValueAtTime(.0001,start+offset+.32);
+   osc.connect(gain);gain.connect(ctx.destination);
+   osc.start(start+offset);osc.stop(start+offset+.34);
+  });
+  return 1050;
+ }catch(error){console.warn("Congratulation sound failed:",error);return 0;}
+}
+function latestCompletedWinner(currentTotals){
+ const totals=currentTotals||[0,1,2,3].map(i=>Number((document.getElementById("total"+i)?.textContent||"0").replace(/,/g,""))||0);
+ const highest=Math.max(...totals);
+ if(highest<=0)return null;
+ const winnerIndexes=totals.map((value,index)=>value===highest?index:-1).filter(index=>index>=0);
+ return {name:winnerIndexes.map(index=>names()[index]).join(", "),value:highest};
+}
+function syncWinnerNameFromLatestRow(currentTotals){
+ const winner=latestCompletedWinner(currentTotals);
+ if(!winner||!winner.name)return "";
+ const field=document.getElementById("winnerNameInput");
+ if(field&&field.value!==winner.name){field.value=winner.name;updateWinnerMarquee();saveGame();}
+ return winner.name;
+}
 function announceLatest(){
- const last=results.lastElementChild;
- if(!last)return;
- const inputs=rowInputs(last);
- if(!inputs.every(x=>/^\d{1,4}$/.test(x.value.trim())))return;
- const nums=inputs.map(x=>Number(x.value)),max=Math.max(...nums);
- const indexes=nums.map((n,i)=>n===max?i:-1).filter(i=>i>=0);
- const winner=indexes.map(i=>names()[i]).join(` ${tr("and")} `);
- showWinnerAnnouncement(`🏆 ${winner} ${tr("won")}`);
- if(audioEnabled){
-  playClap();
-  speakText(winner,.72,1.0);
+ const winnerName=syncWinnerNameFromLatestRow();
+ if(!winnerName){
+  const status=document.getElementById("status");
+  if(status)status.textContent="Enter all four numbers in a round before announcing the winner.";
+  return;
  }
+ audioEnabled=true;
+ refreshVoices();
+ const delay=playCongratulationSound();
+ showWinnerAnnouncement(winnerName+" Won this game. Congratulations!");
+ window.setTimeout(()=>speakText(winnerName+" Won this game. Congratulations!",.62,1.08),delay);
 }
 function clearIndexedDBSave(){
  return openGameDB().then(db=>new Promise((resolve,reject)=>{
@@ -325,7 +375,7 @@ function clearIndexedDBSave(){
 }
 function resetGame(){
  if(!confirm(tr("confirm")))return;
- results.innerHTML="";roundCount=0;gameOverAnnounced=false;
+ results.innerHTML="";roundCount=0;gameOverAnnounced=false;lastSpokenHighest="";if(highestSpeakTimer)clearTimeout(highestSpeakTimer);
  try{localStorage.removeItem(SAVE_KEY);}catch(error){console.warn("Could not clear local save:",error);}
  clearIndexedDBSave().catch(error=>console.warn("Could not clear IndexedDB save:",error));
  document.getElementById("roundCount").textContent="0";
@@ -389,7 +439,7 @@ document.getElementById("winnerNameInput").addEventListener("input",()=>{updateW
 document.getElementById("footerYear").textContent=new Date().getFullYear();
 applyLanguage();
 updateWinnerMarquee();
-document.getElementById("addBtn").addEventListener("click",addRow);
+document.getElementById("addBtn").addEventListener("click",addNextRowAfterCompletedRound);
 document.getElementById("voiceBtn").addEventListener("click",enableAudio);
 document.getElementById("announceBtn").addEventListener("click",announceLatest);
 document.getElementById("resetBtn").addEventListener("click",resetGame);
