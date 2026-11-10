@@ -45,7 +45,13 @@ function currentWinnerName(){
 }
 function updateWinnerMarquee(){
  const name=currentWinnerName();
- document.getElementById("winnerMarqueeText").textContent=`${name} ${tr("won")}`;
+ const text=document.getElementById("winnerMarqueeText");
+ if(!text)return;
+ text.textContent=`${name} ${tr("won")}`;
+ // Restart the CSS animation after each name change (important on iOS Safari).
+ text.classList.remove("marquee-running");
+ void text.offsetWidth;
+ text.classList.add("marquee-running");
 }
 function displayHighestTotal(value){
  const message=`Highest Total: ${Number(value).toLocaleString("en-US")}`;
@@ -76,37 +82,42 @@ if("speechSynthesis" in window){
  speechSynthesis.addEventListener?.("voiceschanged",refreshVoices);
 }
 function speakText(text,rate=.72,pitch=1.0){
- if(!audioEnabled||!("speechSynthesis" in window))return;
+ if(!audioEnabled||!("speechSynthesis" in window))return false;
  try{
-  speechSynthesis.cancel();
-  const msg=new SpeechSynthesisUtterance(text);
-  // Soft, calm and clearly articulated delivery; exact voice depends on device language voices.
+  const synth=window.speechSynthesis;
+  // Avoid repeated cancel() calls: iOS Safari can leave its speech queue stalled after cancel.
+  if(synth.speaking||synth.pending)synth.cancel();
+  const msg=new SpeechSynthesisUtterance(String(text));
   msg.lang=selectedVoiceLanguage;
   msg.rate=Math.min(Number(rate)||.72,.78);
   msg.pitch=Math.max(Number(pitch)||1.0,1.12);
   msg.volume=1;
   const voice=getVoice();if(voice)msg.voice=voice;
-  speechSynthesis.speak(msg);
- }catch(error){console.warn("Speech playback failed:",error);}
+  synth.speak(msg);
+  return true;
+ }catch(error){console.warn("Speech playback failed:",error);return false;}
 }
-async function enableAudio(){
+function enableAudio(){
  const status=document.getElementById("status")||{set textContent(value){}};
  if(!("speechSynthesis" in window)){
   status.textContent=tr("voiceUnsupported");
   return;
  }
+ // Keep speechSynthesis.speak() inside the actual tap handler; iOS Safari requires
+ // a direct user gesture before it will unlock speech output.
  audioEnabled=true;
  try{
   const AC=window.AudioContext||window.webkitAudioContext;
   if(AC){
    if(!gameAudioContext)gameAudioContext=new AC();
-   if(gameAudioContext.state==="suspended")await gameAudioContext.resume();
+   if(gameAudioContext.state==="suspended")gameAudioContext.resume().catch(()=>{});
   }
  }catch(error){console.warn("Audio could not be unlocked:",error);}
  refreshVoices();
  if(winnerReminderTimer)clearInterval(winnerReminderTimer);
  winnerReminderTimer=null;
  status.textContent=tr("voiceEnabled");
+ speakText("Voice enabled",.68,1.05);
 }
 function announceWinnerReminder(){
  // Periodic winner reminders are disabled.
@@ -361,9 +372,11 @@ function announceLatest(){
  }
  audioEnabled=true;
  refreshVoices();
- const delay=playCongratulationSound();
- showWinnerAnnouncement(winnerName+" Won this game. Congratulations!");
- window.setTimeout(()=>speakText(winnerName+" Won this game. Congratulations!",.62,1.08),delay);
+ playCongratulationSound();
+ const message=winnerName+" Won this game. Congratulations!";
+ showWinnerAnnouncement(message);
+ // Start speech synchronously from the Winner-button tap for mobile Safari.
+ speakText(message,.62,1.08);
 }
 function clearIndexedDBSave(){
  return openGameDB().then(db=>new Promise((resolve,reject)=>{
