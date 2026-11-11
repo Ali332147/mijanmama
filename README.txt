@@ -1,12 +1,16 @@
-JABJAL Number Winner Game – Corrected Marquee, Highest Total & Game Over
+JABJAL Number Winner Game – Mobile Marquee Fix
 
-Changes:
-- Restored the marquee to show the original winner-name text (e.g. “Bappi Won The Game”).
-- Highest Total remains in the original announcement area, not in the marquee.
-- Voice says “Highest Total: [number]” only after all four numbers in a row are entered and typing pauses.
-- Game Over is spoken only once after a complete four-number row is entered and the combined total of all four players is greater than 1000.
-- Partial typing and enabling Voice do not trigger Game Over.
-- Game Over does not overwrite the Highest Total display.
-- No clap/applause.
+Files:
+- index.html
+- css/styles.css
+- js/script.js
 
-Upload index.html, css/ and js/ together to GitHub Pages.
+Fix:
+- Reworked the winner marquee animation for iPhone Safari and Android browsers.
+- Winner text starts at the right edge, scrolls across the banner, and exits on the left.
+- The text remains visible if the device has Reduce Motion enabled (static centered fallback).
+- Existing game logic and voice behavior are preserved.
+
+Upload all three website items together to the same GitHub Pages folder:
+index.html, css/ and js/.
+Then refresh the website on the phone. If the old CSS remains cached, close the tab and reopen the live page.

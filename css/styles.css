@@ -402,3 +402,65 @@ body{
   .sticky-game-top .toolbar{margin-left:auto !important;margin-right:auto !important}
   .game-footer{width:100% !important;max-width:520px !important}
 }
+
+/* JABJAL mobile-safe marquee: keep winner text visible and scrolling on iOS/Android */
+.winner-banner .winner-marquee{
+  position:relative !important;
+  display:block !important;
+  width:100% !important;
+  height:38px !important;
+  min-height:38px !important;
+  overflow:hidden !important;
+  white-space:nowrap !important;
+  line-height:38px !important;
+  margin:0 0 8px !important;
+  padding:0 !important;
+  -webkit-mask-image:-webkit-radial-gradient(white, black);
+}
+.winner-banner #winnerMarqueeText{
+  display:inline-block !important;
+  position:relative !important;
+  width:max-content !important;
+  max-width:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  white-space:nowrap !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  color:#dc2626 !important;
+  font-size:clamp(21px,4vw,30px) !important;
+  line-height:38px !important;
+  -webkit-transform:translate3d(100%,0,0);
+  transform:translate3d(100%,0,0);
+  -webkit-animation:winnerMarqueeMobileScroll 12s linear infinite !important;
+  animation:winnerMarqueeMobileScroll 12s linear infinite !important;
+  will-change:transform;
+}
+.winner-banner #winnerMarqueeText.marquee-running{
+  -webkit-animation:winnerMarqueeMobileScroll 12s linear infinite !important;
+  animation:winnerMarqueeMobileScroll 12s linear infinite !important;
+}
+@-webkit-keyframes winnerMarqueeMobileScroll{
+  from{-webkit-transform:translate3d(100%,0,0)}
+  to{-webkit-transform:translate3d(-100%,0,0)}
+}
+@keyframes winnerMarqueeMobileScroll{
+  from{transform:translate3d(100%,0,0)}
+  to{transform:translate3d(-100%,0,0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .winner-banner #winnerMarqueeText,
+  .winner-banner #winnerMarqueeText.marquee-running{
+    -webkit-animation:none !important;
+    animation:none !important;
+    -webkit-transform:none !important;
+    transform:none !important;
+    display:block !important;
+    width:100% !important;
+    text-align:center !important;
+  }
+}
+@media(max-width:600px){
+  .winner-banner .winner-marquee{height:34px !important;min-height:34px !important;line-height:34px !important}
+  .winner-banner #winnerMarqueeText{font-size:21px !important;line-height:34px !important}
+}
